@@ -154,6 +154,6 @@ const runFunction = async () => {
   // await browser.close();
 };
 
-runFunction();
+// runFunction();
 
-// cron.schedule('1 5 * * *', runFunction);
+cron.schedule('1 5 * * *', runFunction);
