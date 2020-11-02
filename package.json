@@ -1,0 +1,24 @@
+{
+  "name": "autobook-swim-slot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yalunga/autobook-swim-slot.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/yalunga/autobook-swim-slot/issues"
+  },
+  "homepage": "https://github.com/yalunga/autobook-swim-slot#readme",
+  "dependencies": {
+    "node-cron": "^2.0.3",
+    "puppeteer": "^5.4.1"
+  }
+}
