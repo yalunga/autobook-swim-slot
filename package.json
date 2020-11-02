@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/yalunga/autobook-swim-slot#readme",
   "dependencies": {
+    "cli-select": "^1.1.2",
     "node-cron": "^2.0.3",
     "puppeteer": "^5.4.1"
   }

@@ -1,9 +1,79 @@
 const cron = require('node-cron');
 const puppeteer = require('puppeteer');
+const cliSelect = require('cli-select');
+
 
 const dayNumberToStringArray = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
+const timeslotsMondayToThursday = [
+  'Lap Swim 5am',
+  'Lap Swim 6am',
+  'Lap Swim 7am',
+  'Lap Swim 8am',
+  'Lap Swim 9am',
+  'Lap Swim 10-11:25am',
+  'Lap Swim 2pm',
+  'Olympic Pool Lap Swim 3pm',
+  'Recreation Pool Lap Swim 3-4:25pm',
+  'Olympic Pool Lap Swim 7pm'
+];
+
+const timeslotsFriday = [
+  'Lap Swim 5am',
+  'Lap Swim 6am',
+  'Lap Swim 7am',
+  'Lap Swim 8am',
+  'Lap Swim 9am',
+  'Lap Swim 10-11:25am',
+  'Lap Swim 12pm',
+  'Lap Swim 1pm',
+  'Lap Swim 2pm',
+  'Olympic Pool Lap Swim 3pm'
+];
+
+const timeslotsSaturday = [
+  'Lap Swim 6am',
+  'Lap Swim 7am',
+  'Lap Swim 8am',
+  'Olympic Pool Lap Swim 9am',
+  'Olympic Pool Lap Swim 10am',
+  'Olympic Pool Lap Swim 11am',
+  'Olympic Pool Lap Swim 12pm',
+  'Lap Swim 1pm',
+  'Lap Swim 2pm',
+  'Lap Swim 3pm',
+];
+
+const timeslotsSunday = [
+  'Lap Swim 12pm',
+  'Lap Swim 1pm',
+  'Lap Swim 2pm',
+  'Lap Swim 3pm',
+];
+
+const timeslotsByDay = [
+  timeslotsSunday,
+  timeslotsMondayToThursday,
+  timeslotsMondayToThursday,
+  timeslotsMondayToThursday,
+  timeslotsMondayToThursday,
+  timeslotsFriday,
+  timeslotsSaturday
+];
+
 const runFunction = async () => {
+  const today = new Date();
+  const reserveDay = today.getDay() + 2;
+
+  console.log(`Reserve a lap swim lane for ${dayNumberToStringArray[reserveDay + 1]}`);
+
+  const { value: timeslot } = await cliSelect({
+    values: timeslotsByDay[reserveDay]
+  });
+
+  console.log(`Attempting to reserve ${timeslot} for ${dayNumberToStringArray[reserveDay + 1]}`);
+
+
   const browser = await puppeteer.launch({ headless: false });
   const [page] = await browser.pages();
   await page.goto('https://secure.rec1.com/AZ/oro-valley-az/catalog');
@@ -23,8 +93,7 @@ const runFunction = async () => {
   });
 
   const elements = await page.$$('.rec1-catalog-group-name');
-  const today = new Date();
-  const reserveDay = today.getDay() + 2;
+
 
   for (const element of elements) {
     const textJson = await element.getProperty('textContent');
@@ -49,7 +118,7 @@ const runFunction = async () => {
     const textJson = await element.getProperty('textContent');
     const text = await textJson.jsonValue();
 
-    if (text.includes('Lap Swim 10-11:25am')) {
+    if (text.includes(timeslot)) {
       await element.click();
       break;
     }
@@ -85,4 +154,6 @@ const runFunction = async () => {
   // await browser.close();
 };
 
-cron.schedule('1 5 * * *', runFunction);
+runFunction();
+
+// cron.schedule('1 5 * * *', runFunction);
