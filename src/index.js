@@ -79,9 +79,9 @@ const runFunction = async () => {
   await page.goto('https://secure.rec1.com/AZ/oro-valley-az/catalog');
   const loginButton = await page.$('.rec1-login-trigger');
   await loginButton.click();
-  await page.$eval('#login-username', el => el.value = 'yalungp@gmail.com');
+  await page.$eval('#login-username', el => el.value = 'email');
   await page.$eval('#login-password', el => {
-    el.value = 'Swimteam!1';
+    el.value = 'password';
     el.blur
   });
   const password = await page.$('#login-password');
